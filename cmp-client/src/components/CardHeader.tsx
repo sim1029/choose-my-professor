@@ -1,15 +1,22 @@
-import Typography from "@mui/material/Typography"
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 
 interface CardHeaderProps {
+  size: number;
   children: string;
 }
 
-const CardHeader = ({children}: CardHeaderProps) => {
+const CardHeader = ({ children, size }: CardHeaderProps) => {
   return (
-    <Typography variant="caption" sx={{color: "text.secondary", fontWeight: "bold"}}>
-      {children}
-    </Typography>
-  )
-}
+    <Grid item xs={size}>
+      <Typography
+        variant="caption"
+        sx={{ color: "primary.dark", fontWeight: "bold" }}
+      >
+        {children}
+      </Typography>
+    </Grid>
+  );
+};
 
-export default CardHeader
+export default CardHeader;
