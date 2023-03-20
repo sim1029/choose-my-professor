@@ -25,7 +25,7 @@ const SearchBar = () => {
     <Stack
       alignItems="center"
       p={8}
-      sx={{ backgroundColor: "primary.main" }}
+      sx={{ backgroundColor: "primary.main", borderRadius: 2 }}
       mx={2}
     >
       <Stack direction="row" spacing={2}>
