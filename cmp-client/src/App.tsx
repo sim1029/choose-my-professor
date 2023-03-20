@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 import CardHeaders from "./components/CardHeaders";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Navbar from "./components/Navbar";
+import SearchBar from "./components/SearchBar";
 
 const theme = createTheme({
   typography: {
@@ -27,11 +28,14 @@ const theme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Grid container rowSpacing={10} px={4}>
+      <Grid container spacing={2} px={4}>
         <Grid item xs={12}>
           <Navbar></Navbar>
         </Grid>
         <Grid item xs={12}>
+          <SearchBar></SearchBar>
+        </Grid>
+        <Grid item xs={12} mt={4}>
           <Grid
             container
             rowSpacing={0}
