@@ -97,7 +97,7 @@ const ProfessorCard = ({ isTopCard }: ProfessorCardProps) => {
           <Grid item xs={5}>
             <Stack direction="row" spacing={4}>
               <Typography
-                variant={"subtitle1"}
+                variant={"subtitle2"}
                 fontWeight="bold"
                 flexShrink={0}
               >
@@ -116,7 +116,7 @@ const ProfessorCard = ({ isTopCard }: ProfessorCardProps) => {
           <Grid item xs={7}>
             <Stack direction="row" spacing={4}>
               <Typography
-                variant={"subtitle1"}
+                variant={"subtitle2"}
                 flexShrink={0}
                 fontWeight="bold"
               >
