@@ -33,7 +33,9 @@ const Navbar = () => {
     <Box sx={{ flexGrow: 1 }}>
       <Toolbar>
         <Box sx={{ flexGrow: 1 }}>
-          <img src={cmpLogo} width={200}></img>
+          <a href="/">
+            <img src={cmpLogo} width={200}></img>
+          </a>
         </Box>
         <Button variant="contained" disableElevation color="secondary">
           Contact Us

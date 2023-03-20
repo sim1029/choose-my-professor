@@ -69,7 +69,7 @@ const SearchBar = () => {
             size="large"
             startIcon={<SearchIcon />}
           >
-            Find Professor
+            Search
           </Button>
         </div>
       </Stack>
