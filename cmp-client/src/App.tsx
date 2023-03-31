@@ -24,6 +24,15 @@ const theme = createTheme({
       main: "#2B2DA7",
     },
   },
+  components: {
+    MuiChip: {
+      styleOverrides: {
+        label: {
+          fontFamily: 'inherit',
+        },
+      },
+    },
+  },
 });
 
 function App() {
