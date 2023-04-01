@@ -7,6 +7,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Navbar from "./components/Navbar";
 import SearchBar from "./components/SearchBar";
 import ProfessorCardHeader from "./components/ProfessorCardHeader";
+import { useState } from "react";
 
 const theme = createTheme({
   typography: {
@@ -36,6 +37,8 @@ const theme = createTheme({
 });
 
 function App() {
+  const [searchResults, setSearchResults] = useState<any[]>([])
+
   return (
     <ThemeProvider theme={theme}>
       <Grid container spacing={2} px={4}>
@@ -43,7 +46,7 @@ function App() {
           <Navbar></Navbar>
         </Grid>
         <Grid item xs={12}>
-          <SearchBar></SearchBar>
+          <SearchBar setSearchResults={setSearchResults}></SearchBar>
         </Grid>
         <Grid item xs={12} mt={2}>
           <ProfessorCardHeader />
@@ -56,10 +59,11 @@ function App() {
             columnSpacing={{ xs: 0, lg: 4 }}
           >
             <CardHeaders />
-            <ProfessorCard isTopCard={true} />
-            <ProfessorCard />
-            <ProfessorCard />
-            <ProfessorCard />
+            {searchResults.map((result) => {
+              return (
+                <ProfessorCard key={result[3].name}></ProfessorCard>
+              )
+            })}
           </Grid>
         </Grid>
       </Grid>

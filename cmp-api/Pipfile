@@ -8,6 +8,7 @@ flask = "*"
 flask-restful = "*"
 numpy = "*"
 pandas = "*"
+flask-cors = "*"
 
 [dev-packages]
 
