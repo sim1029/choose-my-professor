@@ -6,12 +6,14 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import LanguageIcon from "@mui/icons-material/Language";
 import internet from "../assets/internet.png";
+import { ProfessorResult } from "./SearchBar";
 
 interface ProfessorCardProps {
   isTopCard?: boolean;
+  professorData: ProfessorResult;
 }
 
-const ProfessorCard = ({ isTopCard }: ProfessorCardProps) => {
+const ProfessorCard = ({ isTopCard, professorData }: ProfessorCardProps) => {
   return (
     <Grid item xs={12}>
       <Paper
@@ -59,17 +61,17 @@ const ProfessorCard = ({ isTopCard }: ProfessorCardProps) => {
         >
           <Grid item xs={1}>
             <Typography variant={"h6"} fontWeight="bold">
-              6.9
+              {professorData.rating}
             </Typography>
           </Grid>
           <Grid item xs={4}>
             <Typography variant={"body1"} fontWeight="bold">
-              Simon Schueller
+              {professorData.name}
             </Typography>
           </Grid>
           <Grid item xs={4}>
             <Typography variant={"body1"} fontWeight="bold">
-              Tag1, Tag2, Tag3...
+              {professorData.tags ? Object.keys(professorData.tags) : []}
             </Typography>
           </Grid>
           <Grid item xs={2}>
@@ -78,7 +80,7 @@ const ProfessorCard = ({ isTopCard }: ProfessorCardProps) => {
             </Typography>
           </Grid>
           <Grid item xs={1} container justifyContent="end">
-            <a href="https://www.ratemyprofessors.com/">
+            <a href={professorData.url}>
               <img src={internet} width={32}></img>
             </a>
           </Grid>
@@ -101,15 +103,14 @@ const ProfessorCard = ({ isTopCard }: ProfessorCardProps) => {
                 fontWeight="bold"
                 flexShrink={0}
               >
-                Info-1
+                Positive Review
               </Typography>
               <Typography
                 variant={"subtitle2"}
                 sx={{ maxWidth: 300 }}
                 color="primary.dark"
               >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                {professorData.comments ? professorData.comments[0] : ""}
               </Typography>
             </Stack>
           </Grid>
@@ -120,15 +121,14 @@ const ProfessorCard = ({ isTopCard }: ProfessorCardProps) => {
                 flexShrink={0}
                 fontWeight="bold"
               >
-                Info-2
+                Negative Review
               </Typography>
               <Typography
                 variant={"subtitle2"}
                 sx={{ maxWidth: 300 }}
                 color="primary.dark"
               >
-                Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur.
+                {professorData.comments ? professorData.comments[1] : ""}
               </Typography>
             </Stack>
           </Grid>

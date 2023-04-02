@@ -5,7 +5,7 @@ import Grid from "@mui/material/Grid";
 import CardHeaders from "./components/CardHeaders";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Navbar from "./components/Navbar";
-import SearchBar from "./components/SearchBar";
+import SearchBar, { ProfessorResult } from "./components/SearchBar";
 import ProfessorCardHeader from "./components/ProfessorCardHeader";
 import { useState } from "react";
 
@@ -29,7 +29,7 @@ const theme = createTheme({
     MuiChip: {
       styleOverrides: {
         label: {
-          fontFamily: 'inherit',
+          fontFamily: "inherit",
         },
       },
     },
@@ -37,7 +37,7 @@ const theme = createTheme({
 });
 
 function App() {
-  const [searchResults, setSearchResults] = useState<any[]>([])
+  const [searchResults, setSearchResults] = useState<ProfessorResult[]>([]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -59,10 +59,13 @@ function App() {
             columnSpacing={{ xs: 0, lg: 4 }}
           >
             <CardHeaders />
-            {searchResults.map((result) => {
+            {searchResults.map((professorData) => {
               return (
-                <ProfessorCard key={result[3].name}></ProfessorCard>
-              )
+                <ProfessorCard
+                  key={professorData.name}
+                  professorData={professorData}
+                ></ProfessorCard>
+              );
             })}
           </Grid>
         </Grid>
