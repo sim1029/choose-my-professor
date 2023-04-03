@@ -55,7 +55,7 @@ function App() {
           <Grid
             container
             rowSpacing={0}
-            px={4}
+            px={2}
             columnSpacing={{ xs: 0, lg: 4 }}
           >
             <CardHeaders />

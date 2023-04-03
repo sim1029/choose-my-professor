@@ -82,7 +82,6 @@ const SearchBar = ({ setSearchResults }: SearchBarProps) => {
   const theme = useTheme();
   const [tags, setTags] = React.useState<string[]>([]);
   const [course, setCourse] = React.useState<string>("");
-  const [professors, setProfessors] = React.useState<string[]>([]);
 
   const handleChange = (event: SelectChangeEvent<typeof tags>) => {
     const {
@@ -107,7 +106,6 @@ const SearchBar = ({ setSearchResults }: SearchBarProps) => {
           },
         }
       );
-      setProfessors(response.data.profs);
       let resProfs = response.data.profs;
 
       // Get all the required data for each professor to pass to the list
