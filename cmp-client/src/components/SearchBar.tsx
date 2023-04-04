@@ -19,6 +19,8 @@ import ListItemText from "@mui/material/ListItemText";
 import axios from "axios";
 
 const BASE_URL = "http://127.0.0.1:5000/";
+const PROD_URL =
+  "https://46ef38nhr3.execute-api.us-east-1.amazonaws.com/cmp-dev/";
 
 export type ProfessorResult = {
   comments?: string[];
@@ -101,7 +103,7 @@ const SearchBar = ({ setSearchResults, setTags }: SearchBarProps) => {
     try {
       // Get the professors that teach this course
       const response = await axios.get<ProfessorsResponse>(
-        BASE_URL + "professor-for-course",
+        PROD_URL + "professor-for-course",
         {
           params: {
             course: course,
@@ -119,7 +121,7 @@ const SearchBar = ({ setSearchResults, setTags }: SearchBarProps) => {
       const promises = resProfs.flatMap((professor) => {
         return urls.map((url) => {
           return axios
-            .get(BASE_URL + url, {
+            .get(PROD_URL + url, {
               params: {
                 course: course,
                 professor: professor,

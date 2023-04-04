@@ -1,0 +1,10 @@
+{
+  "cmp-dev": {
+    "app_function": "backend.app",
+    "aws_region": "us-east-1",
+    "profile_name": "simon-dev",
+    "project_name": "cmp-api",
+    "runtime": "python3.9",
+    "s3_bucket": "cmp-api-dev"
+  }
+}
