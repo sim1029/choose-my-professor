@@ -1,0 +1,186 @@
+{
+	"info": {
+		"_postman_id": "2106801f-ec9d-4431-a896-8b3b989ad8f9",
+		"name": "cs1699 backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21651765"
+	},
+	"item": [
+		{
+			"name": "Get Comments",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/comments?course=BUSMKT1422&professor=1bfaf708-ba04-11ed-b4e7-a4c3f0856cc6",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "course",
+							"value": "BUSMKT1422"
+						},
+						{
+							"key": "professor",
+							"value": "1bfaf708-ba04-11ed-b4e7-a4c3f0856cc6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Professors For A Course",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/professor-for-course?course=BUSMKT1422",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"professor-for-course"
+					],
+					"query": [
+						{
+							"key": "course",
+							"value": "BUSMKT1422"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Rating For A Professor",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/rating?professor=1bfaf708-ba04-11ed-b4e7-a4c3f0856cc6",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"rating"
+					],
+					"query": [
+						{
+							"key": "professor",
+							"value": "1bfaf708-ba04-11ed-b4e7-a4c3f0856cc6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Url For A Professor",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/url?professor=1bfaf708-ba04-11ed-b4e7-a4c3f0856cc6",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"url"
+					],
+					"query": [
+						{
+							"key": "professor",
+							"value": "1bfaf708-ba04-11ed-b4e7-a4c3f0856cc6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Name For A Professor",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/name?professor=1bfaf708-ba04-11ed-b4e7-a4c3f0856cc6",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"name"
+					],
+					"query": [
+						{
+							"key": "professor",
+							"value": "1bfaf708-ba04-11ed-b4e7-a4c3f0856cc6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Tag Frequency For A Professor",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/tags?professor=1bfaf708-ba04-11ed-b4e7-a4c3f0856cc6&course=BUSMKT1422",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"tags"
+					],
+					"query": [
+						{
+							"key": "professor",
+							"value": "1bfaf708-ba04-11ed-b4e7-a4c3f0856cc6"
+						},
+						{
+							"key": "course",
+							"value": "BUSMKT1422"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
