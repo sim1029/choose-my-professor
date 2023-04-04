@@ -38,37 +38,47 @@ const theme = createTheme({
 
 function App() {
   const [searchResults, setSearchResults] = useState<ProfessorResult[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container spacing={2} px={4}>
+      <Grid container spacing={2} p={4}>
         <Grid item xs={12}>
           <Navbar></Navbar>
         </Grid>
         <Grid item xs={12}>
-          <SearchBar setSearchResults={setSearchResults}></SearchBar>
+          <SearchBar
+            setSearchResults={setSearchResults}
+            setTags={setTags}
+          ></SearchBar>
         </Grid>
-        <Grid item xs={12} mt={2}>
-          <ProfessorCardHeader />
-        </Grid>
-        <Grid item xs={12} mt={2}>
-          <Grid
-            container
-            rowSpacing={0}
-            px={2}
-            columnSpacing={{ xs: 0, lg: 4 }}
-          >
-            <CardHeaders />
-            {searchResults.map((professorData) => {
-              return (
-                <ProfessorCard
-                  key={professorData.name}
-                  professorData={professorData}
-                ></ProfessorCard>
-              );
-            })}
-          </Grid>
-        </Grid>
+        {searchResults.length > 0 && (
+          <>
+            <Grid item xs={12} mt={2}>
+              <ProfessorCardHeader tags={tags} />
+            </Grid>
+            <Grid item xs={12} mt={2}>
+              <Grid
+                container
+                rowSpacing={0}
+                px={2}
+                columnSpacing={{ xs: 0, lg: 4 }}
+              >
+                <CardHeaders />
+                {searchResults.map((professorData, index) => {
+                  return (
+                    <ProfessorCard
+                      key={professorData.name}
+                      professorData={professorData}
+                      isTopCard={index === 0}
+                      isBottomCard={index === searchResults.length - 1}
+                    ></ProfessorCard>
+                  );
+                })}
+              </Grid>
+            </Grid>
+          </>
+        )}
       </Grid>
     </ThemeProvider>
   );

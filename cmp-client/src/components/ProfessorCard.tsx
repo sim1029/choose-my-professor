@@ -12,53 +12,47 @@ import { keyframes } from "@emotion/react";
 
 interface ProfessorCardProps {
   isTopCard?: boolean;
+  isBottomCard?: boolean;
   professorData: ProfessorResult;
 }
 
-const ProfessorCard = ({ isTopCard, professorData }: ProfessorCardProps) => {
+const ProfessorCard = ({
+  isTopCard,
+  isBottomCard,
+  professorData,
+}: ProfessorCardProps) => {
+  const top = isTopCard ? 10 : 0;
+  const bottom = isBottomCard ? 10 : 0;
+  const borderStyles = { bottom: bottom, top: top };
+
   return (
     <Grid item xs={12}>
       <Paper
         elevation={0}
         variant="outlined"
         square={true}
-        sx={
-          isTopCard
-            ? {
-                color: "primary.dark",
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
-                border: 1.5,
-                borderBottom: 0,
-                p: 1,
-                borderColor: "primary.main",
-              }
-            : {
-                color: "primary.dark",
-                border: 1.5,
-                borderBottom: 0,
-                p: 1,
-                borderColor: "primary.main",
-              }
-        }
+        sx={{
+          color: "primary.dark",
+          borderTopLeftRadius: borderStyles.top,
+          borderTopRightRadius: borderStyles.top,
+          borderBottomRightRadius: borderStyles.bottom,
+          borderBottomLeftRadius: borderStyles.bottom,
+          border: 1.5,
+          borderBottom: isBottomCard ? 1.5 : 0,
+          p: 1,
+          borderColor: "primary.main",
+        }}
       >
         <Grid
           container
           p={4}
           color="secondary"
-          sx={
-            isTopCard
-              ? {
-                  bgcolor: "primary.main",
-                  color: "secondary.main",
-                  borderTopLeftRadius: 10,
-                  borderTopRightRadius: 10,
-                }
-              : {
-                  bgcolor: "primary.main",
-                  color: "secondary.main",
-                }
-          }
+          sx={{
+            bgcolor: "primary.main",
+            color: "secondary.main",
+            borderTopLeftRadius: borderStyles.top,
+            borderTopRightRadius: borderStyles.top,
+          }}
           alignItems="center"
         >
           <Grid item xs={1}>
@@ -66,13 +60,13 @@ const ProfessorCard = ({ isTopCard, professorData }: ProfessorCardProps) => {
               {professorData.rating}
             </Typography>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <Typography variant={"body1"} fontWeight="bold">
               {professorData.name}
             </Typography>
           </Grid>
-          <Grid item xs={4}>
-            <Typography variant={"body2"} fontWeight="bold">
+          <Grid item xs={5}>
+            <Typography variant={"body2"}>
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                 {professorData.tags
                   ? Object.keys(professorData.tags).map((key, index) =>
@@ -93,7 +87,7 @@ const ProfessorCard = ({ isTopCard, professorData }: ProfessorCardProps) => {
             </Typography>
           </Grid>
           <Grid item xs={1} container justifyContent="end">
-            <a href={professorData.url}>
+            <a href={professorData.url} target={"_blank"}>
               <img src={internet} width={32}></img>
             </a>
           </Grid>
@@ -106,6 +100,8 @@ const ProfessorCard = ({ isTopCard, professorData }: ProfessorCardProps) => {
           sx={{
             bgcolor: "primary.main",
             color: "secondary.main",
+            borderBottomRightRadius: borderStyles.bottom,
+            borderBottomLeftRadius: borderStyles.bottom,
           }}
           alignItems="start"
         >

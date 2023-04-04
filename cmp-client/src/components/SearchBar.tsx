@@ -76,17 +76,19 @@ type ProfessorsResponse = {
 
 interface SearchBarProps {
   setSearchResults: React.Dispatch<React.SetStateAction<any[]>>;
+  setTags: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-const SearchBar = ({ setSearchResults }: SearchBarProps) => {
+const SearchBar = ({ setSearchResults, setTags }: SearchBarProps) => {
   const theme = useTheme();
-  const [tags, setTags] = React.useState<string[]>([]);
+  const [currTags, setCurrTags] = React.useState<string[]>([]);
   const [course, setCourse] = React.useState<string>("");
 
-  const handleChange = (event: SelectChangeEvent<typeof tags>) => {
+  const handleChange = (event: SelectChangeEvent<typeof currTags>) => {
     const {
       target: { value },
     } = event;
+    setCurrTags(typeof value === "string" ? value.split(",") : value);
     setTags(
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
@@ -183,7 +185,7 @@ const SearchBar = ({ setSearchResults }: SearchBarProps) => {
           color="primary.dark"
           sx={{ textDecoration: "underline 2px" }}
         >
-          Professor
+          Professors
         </Typography>
       </Stack>
       <form onSubmit={handleSubmit}>
@@ -207,7 +209,7 @@ const SearchBar = ({ setSearchResults }: SearchBarProps) => {
               id="multiple-chip"
               color="secondary"
               multiple
-              value={tags}
+              value={currTags}
               onChange={handleChange}
               input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
               renderValue={(selected) => (
@@ -222,7 +224,7 @@ const SearchBar = ({ setSearchResults }: SearchBarProps) => {
               {courseTags.map((tag) => (
                 <MenuItem key={tag} value={tag}>
                   <Checkbox
-                    checked={tags.indexOf(tag) > -1}
+                    checked={currTags.indexOf(tag) > -1}
                     color={"secondary"}
                   />
                   <ListItemText primary={tag} />
