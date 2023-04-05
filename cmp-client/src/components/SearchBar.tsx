@@ -6,17 +6,18 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import React, { ChangeEvent, FormEvent } from "react";
+import React, { ChangeEvent, FormEvent, useEffect } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Chip from "@mui/material/Chip";
-import { Theme, useTheme } from "@mui/material/styles";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
 import axios from "axios";
+import Autocomplete from "@mui/material/Autocomplete";
+import { useTheme } from "@mui/material/styles";
 
 const BASE_URL = "http://127.0.0.1:5000/";
 const PROD_URL =
@@ -82,9 +83,22 @@ interface SearchBarProps {
 }
 
 const SearchBar = ({ setSearchResults, setTags }: SearchBarProps) => {
-  const theme = useTheme();
   const [currTags, setCurrTags] = React.useState<string[]>([]);
   const [course, setCourse] = React.useState<string>("");
+  const [courses, setCourses] = React.useState<string[]>([]);
+  const [suggestions, setSuggestions] = React.useState<string[]>([]);
+  const theme = useTheme();
+
+  useEffect(() => {
+    fetch("/courses.txt")
+      .then((response) => response.text())
+      .then((text) => {
+        const lines = text.split("\n");
+        const array = lines.map((line) => line.trim());
+        array.pop(); // Remove last newline
+        setCourses(array.sort());
+      });
+  }, []);
 
   const handleChange = (event: SelectChangeEvent<typeof currTags>) => {
     const {
@@ -95,6 +109,16 @@ const SearchBar = ({ setSearchResults, setTags }: SearchBarProps) => {
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
     );
+  };
+
+  const updateSuggestions = (value: string) => {
+    // Limit the number of filtered options
+    const maxOptions = 30;
+
+    const filteredSuggestions = courses.filter((suggestion) =>
+      suggestion.toLowerCase().startsWith(value.toLowerCase())
+    );
+    setSuggestions(filteredSuggestions.slice(0, maxOptions));
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -192,16 +216,34 @@ const SearchBar = ({ setSearchResults, setTags }: SearchBarProps) => {
       </Stack>
       <form onSubmit={handleSubmit}>
         <Stack direction="row" spacing={4} mt={4} alignItems="center">
-          <TextField
+          <Autocomplete
             id="course-no"
-            label="Course No."
-            variant="outlined"
-            color="secondary"
-            value={course}
-            onChange={(event: ChangeEvent<HTMLInputElement>) =>
-              setCourse(event.target.value)
-            }
+            options={suggestions}
+            inputValue={course}
+            freeSolo
+            onInputChange={(
+              event: React.SyntheticEvent<Element, Event>,
+              newInputValue: string
+            ) => {
+              setCourse(newInputValue);
+              updateSuggestions(newInputValue);
+            }}
+            renderInput={(params) => (
+              <TextField
+                label="Course No."
+                variant="outlined"
+                color="secondary"
+                {...params}
+              />
+            )}
+            renderOption={(props, option) => (
+              <Box component="li" {...props} sx={{ fontFamily: "Mulish" }}>
+                {option}
+              </Box>
+            )}
+            sx={{ minWidth: 200 }}
           />
+
           <FormControl sx={{ m: 1, minWidth: 250 }}>
             <InputLabel color="secondary" id="demo-multiple-chip-label">
               Tags

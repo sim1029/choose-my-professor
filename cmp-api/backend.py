@@ -1,10 +1,10 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS, cross_origin
+
+# from flask_cors import CORS, cross_origin
 import numpy as np
 import pandas as pd
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:5173", "http://localhost:5000"])
 
 
 @app.before_first_request
@@ -28,7 +28,9 @@ def get_comments():
     reviews_for_course = reviews_for_course.loc[
         reviews_for_course["prof_id"] == args["professor"]
     ]
-    return jsonify({"comments": reviews_for_course.comment.tolist()})
+    response = jsonify({"comments": reviews_for_course.comment.tolist()})
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 
 # PARAMS
@@ -38,7 +40,10 @@ def get_professors_for_course():
     global df, df_professors
     args = request.args
     reviews_for_course = df.loc[df["course"] == " " + args["course"]]
-    return jsonify({"profs": reviews_for_course.prof_id.unique().tolist()})
+    print(reviews_for_course)
+    response = jsonify({"profs": reviews_for_course.prof_id.unique().tolist()})
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 
 # PARAMS
@@ -48,7 +53,9 @@ def get_rating():
     global df, df_professors
     args = request.args
     rating = df_professors.loc[df_professors["id"] == args["professor"]].rating
-    return jsonify({"rating": rating.to_string().split("   ")[1].replace(" ", "")})
+    response = jsonify({"rating": rating.to_string().split("   ")[1].replace(" ", "")})
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 
 # PARAMS
@@ -58,7 +65,9 @@ def get_url():
     global df, df_professors
     args = request.args
     url = df_professors.loc[df_professors["id"] == args["professor"]].url.iloc[0]
-    return jsonify({"url": url})
+    response = jsonify({"url": url})
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 
 # PARAMS
@@ -68,7 +77,9 @@ def get_name():
     global df, df_professors
     args = request.args
     name = df_professors.loc[df_professors["id"] == args["professor"]].name.iloc[0][:-1]
-    return jsonify({"name": name})
+    response = jsonify({"name": name})
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 
 # PARAMS
@@ -90,4 +101,6 @@ def get_tag_freq():
             if len(tag) > 1:
                 tag = tag if tag[0] != " " else tag[1:]
             tag_freq[tag] = 1 if tag not in tag_freq else tag_freq[tag] + 1
-    return jsonify(tag_freq)
+    response = jsonify(tag_freq)
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
