@@ -16,9 +16,11 @@ const CardHeaders = ({ tags }: CardHeadersProps) => {
         <Typography variant={"h6"} fontWeight="bold">
           Professors
         </Typography>
-        <Typography variant={"h6"} fontWeight="bold" color="primary.dark">
-          ({capTags.length > 0 ? capTags.join(", ") : ""})
-        </Typography>
+        {capTags.length > 0 && (
+          <Typography variant={"h6"} fontWeight="bold" color="primary.dark">
+            ({capTags.join(", ")})
+          </Typography>
+        )}
       </Stack>
     </Grid>
   );
