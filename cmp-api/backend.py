@@ -10,7 +10,7 @@ app = Flask(__name__)
 @app.before_first_request
 def startup():
     global df, df_professors
-    url = "https://raw.githubusercontent.com/sim1029/choose-my-professor/alex-ml/cmp-ml/data/predicted_reviews3.csv"
+    url = "https://raw.githubusercontent.com/sim1029/choose-my-professor/alex-ml/cmp-ml/data/predicted_reviews4.csv"
     df = pd.read_csv(url, index_col=0)
 
     url = "https://raw.githubusercontent.com/sim1029/choose-my-professor/main/cmp-ml/data/professors.csv"
@@ -40,7 +40,6 @@ def get_professors_for_course():
     global df, df_professors
     args = request.args
     reviews_for_course = df.loc[df["course"] == " " + args["course"]]
-    print(reviews_for_course)
     response = jsonify({"profs": reviews_for_course.prof_id.unique().tolist()})
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response

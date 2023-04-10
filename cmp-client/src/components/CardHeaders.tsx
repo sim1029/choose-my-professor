@@ -9,7 +9,7 @@ const CardHeaders = () => {
         <CardHeader size={1}>Rating</CardHeader>
         <CardHeader size={3}>Name</CardHeader>
         <CardHeader size={5}>Tags</CardHeader>
-        <CardHeader size={3}>Match %</CardHeader>
+        <CardHeader size={3}>Review Data</CardHeader>
       </Grid>
     </Grid>
   );

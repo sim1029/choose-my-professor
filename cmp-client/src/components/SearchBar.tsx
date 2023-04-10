@@ -18,9 +18,10 @@ import ListItemText from "@mui/material/ListItemText";
 import axios from "axios";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useTheme } from "@mui/material/styles";
+import FormHelperText from "@mui/material/FormHelperText";
+import { SearchState } from "../App";
 
-const BASE_URL = "http://127.0.0.1:5000/";
-const PROD_URL = "http://127.0.0.1:5000/";
+const API_URL = import.meta.env.VITE_API_URL;
 // "https://46ef38nhr3.execute-api.us-east-1.amazonaws.com/cmp-dev/";
 
 export type ProfessorResult = {
@@ -81,6 +82,8 @@ type ProfessorsResponse = {
 interface SearchBarProps {
   setSearchResults: React.Dispatch<React.SetStateAction<ProfessorResult[]>>;
   setTags: React.Dispatch<React.SetStateAction<string[]>>;
+  setSearchState: React.Dispatch<React.SetStateAction<SearchState>>;
+  setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
 }
 
 // Function to calculate the weighted jacard similarity between two sets of tags
@@ -101,7 +104,12 @@ const calcSim = (searchTags: string[], profTags: TagAttribute) => {
   return intersection / union;
 };
 
-const SearchBar = ({ setSearchResults, setTags }: SearchBarProps) => {
+const SearchBar = ({
+  setSearchResults,
+  setTags,
+  setSearchState,
+  setErrorMsg,
+}: SearchBarProps) => {
   const [currTags, setCurrTags] = React.useState<string[]>([]);
   const [course, setCourse] = React.useState<string>("");
   const [courses, setCourses] = React.useState<string[]>([]);
@@ -172,9 +180,12 @@ const SearchBar = ({ setSearchResults, setTags }: SearchBarProps) => {
     event.preventDefault();
     // Do something with the text value, e.g. submit to a server
     try {
+      // Set state on front end since requests can take some time
+      setSearchState("loading");
+
       // Get the professors that teach this course
       const response = await axios.get<ProfessorsResponse>(
-        PROD_URL + "professor-for-course",
+        API_URL + "professor-for-course",
         {
           params: {
             course: course,
@@ -182,6 +193,10 @@ const SearchBar = ({ setSearchResults, setTags }: SearchBarProps) => {
         }
       );
       let resProfs = response.data.profs;
+
+      if (resProfs.length == 0) {
+        throw new Error("Invalid course number");
+      }
 
       // Get all the required data for each professor to pass to the list
       const urls = ["comments", "rating", "url", "name", "tags"];
@@ -192,7 +207,7 @@ const SearchBar = ({ setSearchResults, setTags }: SearchBarProps) => {
       const promises = resProfs.flatMap((professor) => {
         return urls.map((url) => {
           return axios
-            .get(PROD_URL + url, {
+            .get(API_URL + url, {
               params: {
                 course: course,
                 professor: professor,
@@ -254,10 +269,15 @@ const SearchBar = ({ setSearchResults, setTags }: SearchBarProps) => {
         });
         setSearchResults(professorResults);
         setProfessorResults(professorResults);
+        // Everything has succeeded
+        setSearchState("idle");
       } catch (error) {
         console.error(error);
       }
-    } catch (error) {
+    } catch (error: any) {
+      // We had an error
+      setSearchState("error");
+      setErrorMsg(error.message);
       console.error(error);
     }
   };
@@ -283,7 +303,7 @@ const SearchBar = ({ setSearchResults, setTags }: SearchBarProps) => {
         </Typography>
       </Stack>
       <form onSubmit={handleSubmit}>
-        <Stack direction="row" spacing={4} mt={4} alignItems="center">
+        <Stack direction="row" spacing={4} mt={4} alignItems="start">
           <Autocomplete
             id="course-no"
             options={suggestions}
@@ -301,6 +321,7 @@ const SearchBar = ({ setSearchResults, setTags }: SearchBarProps) => {
                 label="Course No."
                 variant="outlined"
                 color="secondary"
+                helperText="Enter a course number"
                 {...params}
               />
             )}
@@ -343,6 +364,9 @@ const SearchBar = ({ setSearchResults, setTags }: SearchBarProps) => {
                 </MenuItem>
               ))}
             </Select>
+            <FormHelperText>
+              Leave blank to filter by star rating
+            </FormHelperText>
           </FormControl>
           <div>
             <Button
@@ -352,6 +376,7 @@ const SearchBar = ({ setSearchResults, setTags }: SearchBarProps) => {
               size="large"
               startIcon={<SearchIcon />}
               type="submit"
+              sx={{ mt: 1 }}
             >
               Search
             </Button>

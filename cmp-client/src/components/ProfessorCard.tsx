@@ -25,6 +25,18 @@ const ProfessorCard = ({
   const bottom = isBottomCard ? 10 : 0;
   const borderStyles = { bottom: bottom, top: top };
 
+  const dataCount = professorData.tags
+    ? Object.entries(professorData.tags).reduce((acc, [key, value]) => {
+        if (Number.isInteger(value)) {
+          return acc + value;
+        }
+        return acc;
+      }, 0)
+    : 0;
+
+  const dataCountCategory =
+    dataCount > 5 ? (dataCount > 20 ? "Dense" : "Sufficient") : "Sparse";
+
   return (
     <Grid item xs={12}>
       <Paper
@@ -70,7 +82,7 @@ const ProfessorCard = ({
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                 {professorData.tags
                   ? Object.keys(professorData.tags).map((key, index) =>
-                      professorData.tags && index < 3 ? (
+                      professorData.tags && key !== "" && index < 3 ? (
                         <Chip
                           key={key}
                           label={key.charAt(0).toUpperCase() + key.slice(1)}
@@ -83,7 +95,7 @@ const ProfessorCard = ({
           </Grid>
           <Grid item xs={2}>
             <Typography variant={"body1"} fontWeight="bold">
-              100 %
+              {dataCountCategory}
             </Typography>
           </Grid>
           <Grid item xs={1} container justifyContent="end">
