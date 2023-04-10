@@ -20,8 +20,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { useTheme } from "@mui/material/styles";
 
 const BASE_URL = "http://127.0.0.1:5000/";
-const PROD_URL =
-  "https://46ef38nhr3.execute-api.us-east-1.amazonaws.com/cmp-dev/";
+const PROD_URL = "http://127.0.0.1:5000/";
+// "https://46ef38nhr3.execute-api.us-east-1.amazonaws.com/cmp-dev/";
 
 export type ProfessorResult = {
   comments?: string[];
@@ -29,6 +29,7 @@ export type ProfessorResult = {
   url?: string;
   name?: string;
   tags?: TagAttribute;
+  simScore?: number;
 };
 
 type TagAttribute = {
@@ -78,15 +79,36 @@ type ProfessorsResponse = {
 };
 
 interface SearchBarProps {
-  setSearchResults: React.Dispatch<React.SetStateAction<any[]>>;
+  setSearchResults: React.Dispatch<React.SetStateAction<ProfessorResult[]>>;
   setTags: React.Dispatch<React.SetStateAction<string[]>>;
 }
+
+// Function to calculate the weighted jacard similarity between two sets of tags
+const calcSim = (searchTags: string[], profTags: TagAttribute) => {
+  let intersection = 0;
+  let union = 0;
+  for (const tag of searchTags) {
+    if (tag in profTags) {
+      intersection += profTags[tag];
+    }
+  }
+  for (const tag of Object.keys(profTags)) {
+    if (!(tag in searchTags)) {
+      union += profTags[tag];
+    }
+  }
+  union += searchTags.length;
+  return intersection / union;
+};
 
 const SearchBar = ({ setSearchResults, setTags }: SearchBarProps) => {
   const [currTags, setCurrTags] = React.useState<string[]>([]);
   const [course, setCourse] = React.useState<string>("");
   const [courses, setCourses] = React.useState<string[]>([]);
   const [suggestions, setSuggestions] = React.useState<string[]>([]);
+  const [professorResults, setProfessorResults] = React.useState<
+    ProfessorResult[]
+  >([]);
   const theme = useTheme();
 
   useEffect(() => {
@@ -104,11 +126,36 @@ const SearchBar = ({ setSearchResults, setTags }: SearchBarProps) => {
     const {
       target: { value },
     } = event;
-    setCurrTags(typeof value === "string" ? value.split(",") : value);
+    const cleanVal = typeof value === "string" ? value.split(",") : value;
+    setCurrTags(cleanVal);
     setTags(
       // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
+      cleanVal
     );
+    professorResults.forEach((professor) => {
+      if (professor.tags) {
+        let simScore = calcSim(cleanVal, professor.tags);
+        professor.simScore = simScore;
+      }
+    });
+    if (professorResults.length > 0) {
+      const sortedResults = professorResults.sort((a, b) => {
+        if (a.simScore && b.simScore) {
+          return b.simScore - a.simScore;
+        } else if (a.simScore) {
+          return -1;
+        } else if (b.simScore) {
+          return 1;
+        } else {
+          if (a.rating && b.rating) {
+            return b.rating - a.rating;
+          }
+        }
+        return 0;
+      });
+      setSearchResults(sortedResults);
+      setProfessorResults(sortedResults);
+    }
   };
 
   const updateSuggestions = (value: string) => {
@@ -185,7 +232,28 @@ const SearchBar = ({ setSearchResults, setTags }: SearchBarProps) => {
         // Do something with the results for each professor
         console.log("PROF RESULTS:", professorResults);
 
+        professorResults.forEach((professor) => {
+          if (professor.tags) {
+            let simScore = calcSim(currTags, professor.tags);
+            professor.simScore = simScore;
+          }
+        });
+        professorResults.sort((a, b) => {
+          if (a.simScore && b.simScore) {
+            return b.simScore - a.simScore;
+          } else if (a.simScore) {
+            return -1;
+          } else if (b.simScore) {
+            return 1;
+          } else {
+            if (a.rating && b.rating) {
+              return b.rating - a.rating;
+            }
+          }
+          return 0;
+        });
         setSearchResults(professorResults);
+        setProfessorResults(professorResults);
       } catch (error) {
         console.error(error);
       }
