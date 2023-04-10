@@ -393,9 +393,142 @@ filtered_departments = {
     'WWIIEURO' : 'HIST',
     'SPORTSECON' : 'ECON',
     'ANCARTHISTORY' : 'HIST',
+    'PHILOSOPHY' : 'PHIL',
+    'PHYSICS' : 'PHYS',
+    'HISTORY' : 'HIST'
 }
 
-
+pitt_departments = [
+    'ACCT',
+    'ADMJ',
+    'AFRCNA',
+    'AFROTC',
+    'ANTH',
+    'ARABIC',
+    'ARC',
+    'ART',
+    'ARTSC',
+    'ASL',
+    'ASTRON',
+    'ATHLTR',
+    'ASL',
+    'ASTRON',
+    'ATHLTR',
+    'BCMS',
+    'BIOENG',
+    'BIOETH',
+    'BIOSC',
+    'BUS',
+    'BUSACC',
+    'BUSBIS',
+    'BUSECN',
+    'BUSEVN',
+    'BUSERV',
+    'BUSFIN',
+    'BUSHRM',
+    'BUSMKT',
+    'BUSORG',
+    'BUSQOM',
+    'BUSSCM',
+    'BUSSPP',
+    'CDACCT',
+    'CEE',
+    'CGS',
+    'CHATHM',
+    'CHE',
+    'CHEM',
+    'CHIN',
+    'CLASS',
+    'CMPINF',
+    'COMMRC',
+    'CS',
+    'CSD',
+    'DENHYG',
+    'DENT',
+    'ECE',
+    'ECON',
+    'EDUC',
+    'EFOP',
+    'EM',
+    'ENGCMP',
+    'ENGFLM',
+    'ENGLIT',
+    'ENGR',
+    'ENGSCI',
+    'ENGWRT',
+    'FMST',
+    'FP',
+    'FR',
+    'GEOL',
+    'GER',
+    'GREEK',
+    'GREEKM',
+    'GSWS',
+    'HAA',
+    'HEBREW',
+    'HHD',
+    'HI',
+    'HINDI',
+    'HIST',
+    'HONORS',
+    'HPS',
+    'HRS',
+    'HUN',
+    'IE',
+    'INFSCI',
+    'IRISH',
+    'ITAL',
+    'JPNSE',
+    'JS',
+    'KOREAN',
+    'LATIN',
+    'LCJS',
+    'LCTL',
+    'LDRSHP',
+    'LING',
+    'MATH',
+    'ME',
+    'MEMS',
+    'MILS',
+    'MUSIC',
+    'NPHS',
+    'NROSCI',
+    'NUR',
+    'NUTR',
+    'OCS',
+    'PEDC',
+    'PERS',
+    'PETE',
+    'PHARM',
+    'PHIL',
+    'PHYS',
+    'PITT',
+    'POLISH',
+    'PORT',
+    'PS',
+    'PSY',
+    'PUBHLT',
+    'PUBSRV',
+    'QUECH'
+    'REHSCI',
+    'RELGST',
+    'RUSS',
+    'SA',
+    'SLAV',
+    'SLOVAK',
+    'SOC',
+    'SOCWRK',
+    'SPAN',
+    'STAT',
+    'SWAHIL',
+    'SWE',
+    'THEA',
+    'TLL',
+    'TURKSH',
+    'UKRAIN',
+    'URBNST',
+    'VIET'
+]
 
 
 
@@ -447,16 +580,25 @@ for course in course_set:
         departments[department] = 1
         
 cleaned_course_names = []
-
 i = 0
 last_department = ''
 for course_name in course_list:
     department = course_name_mapping[course_name][0]
     numbers = course_name_mapping[course_name][1]
 
+    # If there is no course number, mark as blank
+    if numbers == '0000':
+        cleaned_course_names.append('')
+        continue
+
     # If there is no department name, and the prior review is from the same prof, copy the department
     if (department == '' and i > 0 and df.at[i, 'prof_id'] == df.at[i - 1, 'prof_id']):
         department = last_department
+
+    # If there is still no department name or department is not in list, mark as blank
+    if department == '' or department not in pitt_departments:
+        cleaned_course_names.append('')
+        continue
 
     cleaned_course_names.append(department + numbers)
     last_department = department
