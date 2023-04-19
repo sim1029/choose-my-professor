@@ -157,10 +157,10 @@ function App() {
               Made with ❤️ by
               <strong style={{ fontFamily: "Mulish" }}>
                 {" "}
-                Simon Schueller, David Tekla, Alex Wang
+                Simon Schueller, David Teklea, Alex Wang
               </strong>
               , and
-              <strong style={{ fontFamily: "Mulish" }}> Zach Heighstand</strong>
+              <strong style={{ fontFamily: "Mulish" }}> Zach Heistand</strong>
             </Typography>
           </Stack>
         </Grid>
