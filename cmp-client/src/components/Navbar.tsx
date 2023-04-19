@@ -13,22 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import cmpLogo from "../assets/cmp-logo.png";
 
-const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
-
 const Navbar = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Toolbar>
@@ -37,8 +22,15 @@ const Navbar = () => {
             <img src={cmpLogo} width={200}></img>
           </a>
         </Box>
-        <Button variant="contained" disableElevation color="secondary">
-          Contact Us
+        <Button
+          variant="contained"
+          disableElevation
+          color="secondary"
+          component="a"
+          href=""
+          target="_blank"
+        >
+          Review a Course
         </Button>
       </Toolbar>
     </Box>

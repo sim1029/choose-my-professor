@@ -193,6 +193,7 @@ const SearchBar = ({
         }
       );
       let resProfs = response.data.profs;
+      console.log(response.data);
 
       if (resProfs.length == 0) {
         throw new Error("Invalid course number");
