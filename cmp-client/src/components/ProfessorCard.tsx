@@ -37,6 +37,33 @@ const ProfessorCard = ({
   const dataCountCategory =
     dataCount > 5 ? (dataCount > 20 ? "Dense" : "Sufficient") : "Sparse";
 
+  const trim_comment = (comment: string) => {
+    if (comment.length > 200) {
+      return comment.substring(0, 200) + "...";
+    }
+    return comment;
+  };
+
+  const pos_comments =
+    professorData.comments && professorData.comments.positive.length > 1
+      ? [
+          trim_comment(professorData.comments.positive[0]),
+          trim_comment(professorData.comments.positive[1]),
+        ]
+      : professorData.comments && professorData.comments.positive.length == 1
+      ? [trim_comment(professorData.comments.positive[0])]
+      : [];
+
+  const neg_comments =
+    professorData.comments && professorData.comments.negative.length > 1
+      ? [
+          trim_comment(professorData.comments.negative[0]),
+          trim_comment(professorData.comments.negative[1]),
+        ]
+      : professorData.comments && professorData.comments.negative.length == 1
+      ? [trim_comment(professorData.comments.negative[0])]
+      : [];
+
   return (
     <Grid item xs={12}>
       <Paper
@@ -124,8 +151,10 @@ const ProfessorCard = ({
                 fontWeight="bold"
                 flexShrink={0}
               >
-                {professorData.comments && professorData.comments.length > 0
+                {pos_comments.length > 0
                   ? "Positive Review"
+                  : neg_comments.length > 0
+                  ? "Negative Review"
                   : ""}
               </Typography>
               <Typography
@@ -133,10 +162,10 @@ const ProfessorCard = ({
                 sx={{ maxWidth: 300 }}
                 color="primary.dark"
               >
-                {professorData.comments && professorData.comments.length > 0
-                  ? professorData.comments[0].length > 100
-                    ? professorData.comments[0].slice(0, 100) + "..."
-                    : professorData.comments[0]
+                {professorData.comments && pos_comments.length > 0
+                  ? pos_comments[0]
+                  : neg_comments.length > 0
+                  ? neg_comments[0]
                   : ""}
               </Typography>
             </Stack>
@@ -148,7 +177,10 @@ const ProfessorCard = ({
                 flexShrink={0}
                 fontWeight="bold"
               >
-                {professorData.comments && professorData.comments.length == 2
+                {pos_comments.length > 1 && neg_comments.length == 0
+                  ? "Positive Review"
+                  : (neg_comments.length > 0 && pos_comments.length > 0) ||
+                    neg_comments.length > 1
                   ? "Negative Review"
                   : ""}
               </Typography>
@@ -157,10 +189,12 @@ const ProfessorCard = ({
                 sx={{ maxWidth: 300 }}
                 color="primary.dark"
               >
-                {professorData.comments && professorData.comments.length == 2
-                  ? professorData.comments[1].length > 100
-                    ? professorData.comments[1].slice(0, 100) + "..."
-                    : professorData.comments[1]
+                {pos_comments.length > 1 && neg_comments.length == 0
+                  ? pos_comments[1]
+                  : neg_comments.length > 0 && pos_comments.length > 0
+                  ? neg_comments[0]
+                  : neg_comments.length > 1 && pos_comments.length == 0
+                  ? neg_comments[1]
                   : ""}
               </Typography>
             </Stack>
