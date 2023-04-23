@@ -10,7 +10,7 @@ app = Flask(__name__)
 @app.before_first_request
 def startup():
     global df, df_professors
-    url = "https://raw.githubusercontent.com/sim1029/choose-my-professor/main/cmp-ml/data/predicted_reviews4.csv"
+    url = "https://raw.githubusercontent.com/sim1029/choose-my-professor/main/cmp-ml/data/review_sentiments.csv"
     df = pd.read_csv(url, index_col=0)
 
     url = "https://raw.githubusercontent.com/sim1029/choose-my-professor/main/cmp-ml/data/professors.csv"
@@ -28,7 +28,20 @@ def get_comments():
     reviews_for_course = reviews_for_course.loc[
         reviews_for_course["prof_id"] == args["professor"]
     ]
-    response = jsonify({"comments": reviews_for_course.comment.tolist()})
+    reviews_for_course.sort_values(by="comment_score", inplace=True, ascending=False)
+    reviews_for_course = reviews_for_course.reset_index()
+    print("sorted df")
+    print(reviews_for_course)
+    ret = {"positive": [], "negative": []}
+    pos_found, neg_found = 0, 0
+    for i, row in reviews_for_course.iterrows():
+        if pos_found < 2 and row["comment_sent"] == "POS":
+            ret["positive"].append(row["comment"])
+            pos_found += 1
+        if neg_found < 2 and row["comment_sent"] == "NEG":
+            ret["negative"].append(row["comment"])
+            neg_found += 1
+    response = jsonify({"comments": ret})
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
@@ -40,7 +53,6 @@ def get_professors_for_course():
     global df, df_professors
     args = request.args
     reviews_for_course = df.loc[df["course"] == args["course"]]
-    print(reviews_for_course)
     response = jsonify({"profs": reviews_for_course.prof_id.unique().tolist()})
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response

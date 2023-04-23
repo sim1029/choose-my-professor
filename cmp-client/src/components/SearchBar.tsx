@@ -25,7 +25,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 // "https://46ef38nhr3.execute-api.us-east-1.amazonaws.com/cmp-dev/";
 
 export type ProfessorResult = {
-  comments?: string[];
+  comments?: { positive: string[]; negative: string[] };
   rating?: number;
   url?: string;
   name?: string;
