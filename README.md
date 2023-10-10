@@ -1,9 +1,9 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/c3dd6baa-e914-4097-9d65-cf0f7a254692/deploy-status)](https://app.netlify.com/sites/choose-my-professor/deploys)
 
-# Choose My Professor
+# **Choose My Professor**
 A web application augmented with machine learning to synthesize information and choose the best professor for your next class!
 
-# Try it Out
+## **Try it Out**
 [CMP Application](https://tangerine-faun-892268.netlify.app/)
 
 ## **Description**
